@@ -15,21 +15,21 @@ $select = 'SELECT Field_2 FROM Table_2;';
 $user = 'Designer';
 $pass = '';
 $server = '127.0.0.1';
+$vers4D = 15;
 
-$vers4D = 12;
+// detect if PHP is running in 32 or 64 bit mode.
+empty(strstr(php_uname("m"), '64')) ?  $php64bit = false : $php64bit = true;
 
-$arch4Dx64 = true;
-
-
+// get driver based on version submitted and architecture PHP is running in
 switch($vers4D){
 	case (15):
-		$arch4Dx64 ? $driver = '4D v15 ODBC Driver 64-bit' : $driver = '4D v15 ODBC Driver 32-bit';
+		$php64bit ? $driver = '4D v15 ODBC Driver 64-bit' : $driver = '4D v15 ODBC Driver 32-bit';
 		break;
 	case (14):
-		$arch4Dx64 ? $driver = '4D v14 ODBC Driver 64 bits' : $driver = '4D v14 ODBC Driver';
+		$php64bit ? $driver = '4D v14 ODBC Driver 64 bits' : $driver = '4D v14 ODBC Driver';
 		break;
 	case (13):
-		$arch4Dx64 ? $driver = '4D v13 ODBC Driver 64 bits' : $driver = '4D v13 ODBC Driver';
+		$php64bit ? $driver = '4D v13 ODBC Driver 64 bits' : $driver = '4D v13 ODBC Driver';
 		break;
 	default:
 		die('Script currently only supports v13 through v15');
@@ -38,16 +38,17 @@ switch($vers4D){
 // build connection string
 $connection_string = 'DRIVER={'.$driver.'};SERVER='.$server.';UID='.$user.';PWD='.$pass;
 
-ini_set('memory_limit', '512M');
+// temporary increase memory limit
+ini_set('memory_limit', '2048');
 
-// get 
+// execute SELECT 
 $conn = odbc_connect( $connection_string , $user , $pass);
 if ($conn) {
     echo 'Connection established.' . PHP_EOL;
-	$result = odbc_exec($conn,$select);
+	$result = odbc_exec($conn,$select); // <-- 64 bit PHP crashes here..... ?
 	while(odbc_fetch_row($result, 1)){
-		$test = odbc_result($result,1); // get 1st column of current row
-		$lengthOfTest = strlen($test); // get length of column
+		$col = odbc_result($result,1); // get 1st column of current row
+		$lengthOfTest = strlen($col); // get length of column
 		echo 'Length found: ' . $lengthOfTest . PHP_EOL; // print length found
 	}
 	odbc_close($conn);
