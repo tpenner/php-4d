@@ -8,7 +8,7 @@
 
 
 // SQL SELECT to test
-$select = 'SELECT Field_2 FROM Table_2;';
+$select = 'SELECT * FROM Table_2;';
 
 
 // Connection Info:
@@ -46,11 +46,21 @@ $conn = odbc_connect( $connection_string , $user , $pass);
 if ($conn) {
     echo 'Connection established.' . PHP_EOL;
 	$result = odbc_exec($conn,$select); // <-- 64 bit PHP crashes here..... ?
-	while(odbc_fetch_row($result, 1)){
-		$col = odbc_result($result,1); // get 1st column of current row
-		$lengthOfTest = strlen($col); // get length of column
-		echo 'Length found: ' . $lengthOfTest . PHP_EOL; // print length found
+	$rows = odbc_num_rows($result);
+	$cols = odbc_num_fields($result);
+	echo 'Rows found: ' . $rows . PHP_EOL; 
+	echo 'Columns found: ' . $cols . PHP_EOL; 
+	$a = 0;
+	while(odbc_fetch_row($result)){
+		$a++;
+		echo 'row('.$a.')'."\t";
+		for($i = 1; $i <= $cols; $i++){
+			$col = odbc_result($result,$i); 
+			echo 'col('.$i.').length = ' . strlen($col) . "\t"; 
+		}
+		echo PHP_EOL;
 	}
+	odbc_free_result($result);
 	odbc_close($conn);
 } else{
     die("Connection could not be established.");
