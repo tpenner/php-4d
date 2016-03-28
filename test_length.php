@@ -50,10 +50,10 @@ if ($conn) {
 	$cols = odbc_num_fields($result);
 	echo 'Rows found: ' . $rows . PHP_EOL; 
 	echo 'Columns found: ' . $cols . PHP_EOL; 
-	$a = 0;
+	$rowCur = 0;
 	while(odbc_fetch_row($result)){
-		$a++;
-		echo 'row('.$a.')'."\t";
+		$rowCur++;
+		echo 'row('.$rowCur.')'."\t";
 		for($i = 1; $i <= $cols; $i++){
 			$col = odbc_result($result,$i); 
 			echo 'col('.$i.').length = ' . strlen($col) . "\t"; 
