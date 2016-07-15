@@ -5,3 +5,5 @@ This repository is a collection of PHP scripts (code snippets) to help get conne
 Options:
 * [ODBC](ODBC/)
 * [PDO](PDO/)
+
+See also: [4d-connectivity-options](https://github.com/tpenner/4d-connectivity-options#implementations)
