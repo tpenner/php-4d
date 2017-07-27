@@ -1,7 +1,3 @@
-## THIS IS CURRENTLY A WORK IN PROGRESS ##
-
----
-
 # Connecting to 4D Server from PHP via PDO
 
 This repository is a collection of PHP scripts (code snippets) to help get connected to 4D Server from PHP.
@@ -28,3 +24,16 @@ https://github.com/BespokeSupport/pecl-pdo-4d
 https://github.com/jasonpjohnson/pecl-pdo-4d   
 https://github.com/benddailey/pecl-pdo-4d   
 https://github.com/jeromeurban/pecl-pdo-4d   
+
+
+#### Example Usage
+
+    <?php
+    $dsn = '4D:host=localhost;port=19812;charset=UTF-8';
+    $user = 'Administrator';
+    $pswd = 'test';
+    $db = new PDO($dsn, $user, $pswd);
+    $db->exec('CREATE TABLE IF NOT EXISTS myTable(id INT NOT NULL, value VARCHAR(100))');
+    unset($db);
+    echo 'done'; // if you see this then the code ran successfully
+    ?>
